@@ -137,13 +137,43 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+# Database initialization flag
+_db_initialized = False
+
+def ensure_db_initialized():
+    global _db_initialized
+    if not _db_initialized:
+        try:
+            init_db()
+            # Check if we need to add sample data
+            conn = get_db()
+            count = conn.execute('SELECT COUNT(*) FROM destination').fetchone()[0]
+            conn.close()
+            if count == 0:
+                add_sample_destinations()
+                add_admin_user()
+            _db_initialized = True
+        except Exception as e:
+            print(f"Database initialization error: {e}")
+            _db_initialized = True  # Prevent infinite retries
+
 # Routes
 @app.route('/')
 def home():
-    conn = get_db()
-    destinations = conn.execute('SELECT * FROM destination').fetchall()
-    conn.close()
-    return render_template('home.html', destinations=destinations)
+    ensure_db_initialized()
+    try:
+        conn = get_db()
+        destinations = conn.execute('SELECT * FROM destination').fetchall()
+        # Convert Row objects to dictionaries for template compatibility
+        destinations_list = [dict(dest) for dest in destinations]
+        conn.close()
+        return render_template('home.html', destinations=destinations_list)
+    except Exception as e:
+        print(f"Error loading destinations: {e}")
+        import traceback
+        traceback.print_exc()
+        # Return empty list if error
+        return render_template('home.html', destinations=[])
 
 @app.route('/destination/<int:id>')
 def destination_detail(id):
