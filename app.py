@@ -7,7 +7,12 @@ import functools
 import json
 import uuid
 
-app = Flask(__name__)
+# Get the directory where this file is located
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+app = Flask(__name__, 
+            template_folder=os.path.join(basedir, 'templates'),
+            static_folder=os.path.join(basedir, 'static'))
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-here-change-in-production')
 
 # Database path - use /tmp on Vercel for writable location
