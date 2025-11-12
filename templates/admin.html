@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Dream Travels{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Admin Dashboard</h1>
+    
+    <div class="alert alert-info">
+        This is the admin page where you can view and manage your database.
+    </div>
+    
+    <!-- Destinations Table -->
+    <div class="card mb-5">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Destinations</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Image</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for destination in destinations %}
+                        <tr>
+                            <td>{{ destination['id'] }}</td>
+                            <td>{{ destination['name'] }}</td>
+                            <td>{{ destination['description'][:50] }}{% if destination['description']|length > 50 %}...{% endif %}</td>
+                            <td>${{ "%.2f"|format(destination['price']) }}</td>
+                            <td>
+                                {% if destination['image_url'] %}
+                                <img src="{{ destination['image_url'] }}" alt="{{ destination['name'] }}" width="100" class="img-thumbnail">
+                                {% else %}
+                                No image
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('destination_detail', id=destination['id']) }}" class="btn btn-sm btn-info" target="_blank">View</a>
+                                <form method="POST" action="{{ url_for('delete_destination', id=destination['id']) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this destination?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Orders Table -->
+    <div class="card mb-5">
+        <div class="card-header bg-warning text-dark">
+            <h3 class="mb-0">Orders</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Order #</th>
+                            <th>Customer</th>
+                            <th>Total Amount</th>
+                            <th>Payment Method</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>{{ order['order_number'] }}</td>
+                            <td>{{ order['username'] }}</td>
+                            <td>${{ "%.2f"|format(order['total_amount']) }}</td>
+                            <td>{{ order['payment_method'] }}</td>
+                            <td>
+                                <span class="badge bg-success">{{ order['status'] }}</span>
+                            </td>
+                            <td>{{ order['created_at'] }}</td>
+                        </tr>
+                        {% endfor %}
+
+                        {% if not orders %}
+                        <tr>
+                            <td colspan="6" class="text-center">No orders found</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bookings Table -->
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h3 class="mb-0">Bookings</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer Name</th>
+                            <th>Email</th>
+                            <th>Destination</th>
+                            <th>Travel Date</th>
+                            <th>Booking Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking['id'] }}</td>
+                            <td>{{ booking['name'] }}</td>
+                            <td>{{ booking['email'] }}</td>
+                            <td>{{ booking['destination_name'] }}</td>
+                            <td>{{ booking['travel_date'] }}</td>
+                            <td>{{ booking['created_at'] }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('delete_booking', id=booking['id']) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this booking?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                        {% if not bookings %}
+                        <tr>
+                            <td colspan="7" class="text-center">No bookings found</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

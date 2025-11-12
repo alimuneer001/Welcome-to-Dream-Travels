@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Dream Travels{% endblock %}
+
+{% block content %}
+<div class="auth-background login-background">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card auth-card mt-4 mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">Login</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('login') }}">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required autofocus>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button type="submit" class="btn btn-primary">Login</button>
+                                <span>Don't have an account? <a href="{{ url_for('signup') }}">Sign up here</a></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <strong>Demo Credentials:</strong>
+                    <ul class="mb-0 mt-2">
+                        <li><strong>Admin:</strong> Username: admin, Password: admin123</li>
+                        <li><strong>Regular User:</strong> Create a new account to test!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

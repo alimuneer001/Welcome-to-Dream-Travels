@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Book {{ destination['name'] }} - Dream Travels{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1 class="mb-4">Book Your Trip to {{ destination['name'] }}</h1>
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="travel_date" class="form-label">Travel Date</label>
+                        <input type="date" class="form-control" id="travel_date" name="travel_date" required>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Trip Summary</h5>
+                            <p class="card-text">
+                                <strong>Destination:</strong> {{ destination['name'] }}<br>
+                                <strong>Price:</strong> ${{ "%.2f"|format(destination['price']) }}
+                            </p>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
