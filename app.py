@@ -8,11 +8,14 @@ import json
 import uuid
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your-secret-key-here'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-here-change-in-production')
+
+# Database path - use /tmp on Vercel for writable location
+DB_PATH = os.environ.get('DB_PATH', 'travel.db')
 
 # Database initialization
 def init_db():
-    conn = sqlite3.connect('travel.db')
+    conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS destination
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -62,7 +65,7 @@ def init_db():
     conn.close()
 
 def get_db():
-    conn = sqlite3.connect('travel.db')
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
