@@ -12,14 +12,9 @@ os.chdir(project_root)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-# Import Flask app
-try:
-    from app import app, init_db, add_sample_destinations, add_admin_user
-except Exception as import_error:
-    print(f"Failed to import app: {import_error}")
-    import traceback
-    traceback.print_exc()
-    raise
+# Import Flask app at TOP LEVEL so Vercel static analysis can find it
+# Vercel requires 'app', 'application', or 'handler' as a module-level variable
+from app import app, init_db, add_sample_destinations, add_admin_user  # noqa: E402
 
 # Initialize database on module load (Vercel caches the module)
 try:
@@ -41,9 +36,6 @@ except Exception as init_error:
     print(f"Database initialization error: {init_error}")
     import traceback
     traceback.print_exc()
-    # Continue anyway - database might be created on first request
 
-# Export the Flask app for Vercel
-# Vercel Python runtime automatically detects the 'app' variable
-# This is the standard way to deploy Flask on Vercel
-
+# 'app' is already at module level from the import above.
+# Vercel detects it here as the WSGI entry point.
