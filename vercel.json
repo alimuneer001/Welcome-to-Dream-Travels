@@ -4,20 +4,9 @@
     {
       "src": "api/index.py",
       "use": "@vercel/python"
-    },
-    {
-      "src": "static/**",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1",
-      "headers": {
-        "Cache-Control": "public, max-age=3600, must-revalidate"
-      }
-    },
     {
       "src": "/(.*)",
       "dest": "/api/index.py"
