@@ -28,8 +28,10 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ destination.get('name', 'Destination') }}</h5>
                     <p class="card-text text-muted">{{ destination.get('description', '')[:150] }}{% if destination.get('description', '')|length > 150 %}...{% endif %}</p>
-                    <p class="card-text mb-3"><strong class="text-primary fs-5">${{ "%.2f"|format(destination.get('price', 0)) }}</strong></p>
-                    <a href="{{ url_for('destination_detail', id=destination.get('id')) }}" class="btn btn-primary w-100">Learn More</a>
+                    <div class="mt-auto w-100">
+                        <p class="card-text mb-3"><strong class="text-primary fs-5">${{ "%.2f"|format(destination.get('price', 0)) }}</strong></p>
+                        <a href="{{ url_for('destination_detail', id=destination.get('id')) }}" class="btn btn-primary w-100">Learn More</a>
+                    </div>
                 </div>
             </div>
         </div>
